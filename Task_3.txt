@@ -1,0 +1,209 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+// Function prototypes
+void initializeBoard(vector<vector<char>> &board);
+void displayBoard(const vector<vector<char>> &board);
+bool makeMove(vector<vector<char>> &board, char currentPlayer);
+bool checkWin(const vector<vector<char>> &board, char currentPlayer);
+bool checkDraw(const vector<vector<char>> &board);
+char switchPlayer(char currentPlayer);
+
+int main()
+{
+    // Game setup
+    vector<vector<char>> board(3, vector<char>(3, ' '));
+    char currentPlayer = 'X';
+    bool gameWon = false;
+    bool gameDraw = false;
+
+    // Welcome message
+    cout << "🎮 Welcome to the Epic Tic-Tac-Toe Adventure! 🎮\n";
+    initializeBoard(board);
+
+    int choice;
+    do
+    {
+        if (checkDraw(board))
+        {
+            cout << endl;
+            cout << "⚔️ Alas! It's a Noble Draw! ⚔️\n";
+            break;
+        }
+        // Menu
+        cout << "\n🌟 Menu: 🌟\n";
+        cout << "1. Embark on a Move\n";
+        cout << "2. Unveil the Mysterious Board\n";
+        cout << "3. Discover the Result of Your Epic Journey\n";
+        cout << "4. Escape to Reality\n";
+        cout << "Enter your chosen path: ";
+        cin >> choice;
+
+        switch (choice)
+        {
+        case 1:
+            // Player makes a move
+            gameWon = makeMove(board, currentPlayer);
+            if (gameWon)
+            {
+                displayBoard(board);
+                break;
+            }
+            currentPlayer = switchPlayer(currentPlayer);
+            break;
+
+        case 2:
+            // Display the current state of the board
+            displayBoard(board);
+            break;
+
+        case 3:
+            // Display the result of the game
+            gameDraw = checkDraw(board);
+            if (gameDraw)
+            {
+                cout << "⚔️ Alas! It's a Noble Draw! ⚔️\n";
+            }
+            else
+            {
+                cout << "🚀 The Adventure Continues! The Game is Ongoing! 🚀\n";
+            }
+            break;
+
+        case 4:
+            // Exit the game
+            cout << "🏰 Thank You for Visiting the Kingdom of Tic-Tac-Toe! Until Next Time! 🏰\n";
+            break;
+
+        default:
+            // Invalid choice
+            cout << "🧙‍♂️ Invalid Choice! Choose Wisely, Adventurer! 🧙‍♂️\n";
+        }
+
+    } while (choice != 4 && !gameWon && !gameDraw);
+
+    // Display the outcome of the game
+    if (gameWon)
+    {
+        cout << "🏆 Huzzah! Player " << currentPlayer << " Emerges Victorious! 🏆\n";
+    }
+
+    // Ask if players want to embark on another Epic Journey
+    char playAgain;
+    cout << "🌟 Do You Seek Another Adventure? (y/n): ";
+    cin >> playAgain;
+
+    if (playAgain == 'y' || playAgain == 'Y')
+    {
+        main(); // Restart the Epic Adventure
+    }
+
+    return 0;
+}
+
+// Function to initialize the game board
+void initializeBoard(vector<vector<char>> &board)
+{
+    for (int i = 0; i < 3; ++i)
+    {
+        for (int j = 0; j < 3; ++j)
+        {
+            board[i][j] = ' ';
+        }
+    }
+}
+
+// Function to display the current state of the game board
+void displayBoard(const vector<vector<char>> &board)
+{
+    cout << "  0 1 2\n";
+    for (int i = 0; i < 3; ++i)
+    {
+        cout << i << " ";
+        for (int j = 0; j < 3; ++j)
+        {
+            cout << board[i][j] << " ";
+        }
+        cout << "\n";
+    }
+}
+
+// Function for a player to make a move
+bool makeMove(vector<vector<char>> &board, char currentPlayer)
+{
+    displayBoard(board);
+
+    int row, col;
+    while (1)
+    {
+        cout << "🎲 Player " << currentPlayer << ", Choose Your Destiny (Row and Column): ";
+        cin >> row >> col;
+
+        // Check for a valid move
+        if (row < 0 || row >= 3 || col < 0 || col >= 3 || board[row][col] != ' ')
+        {
+            cout << " Invalid Move! \n";
+            continue;
+        }
+
+        // Valid move
+        cout << " Player " << currentPlayer << " Chooses Row " << row << " and Column " << col << endl;
+        break;
+    }
+
+    // Update the board
+    board[row][col] = currentPlayer;
+
+    // Check if the current player has won
+    return checkWin(board, currentPlayer);
+}
+
+// Function to check if the current player has won
+bool checkWin(const vector<vector<char>> &board, char currentPlayer)
+{
+    // Check rows, columns, and diagonals for a win
+    for (int i = 0; i < 3; ++i)
+    {
+        if (board[i][0] == currentPlayer && board[i][1] == currentPlayer && board[i][2] == currentPlayer)
+        {
+            return true; // Row win
+        }
+        if (board[0][i] == currentPlayer && board[1][i] == currentPlayer && board[2][i] == currentPlayer)
+        {
+            return true; // Column win
+        }
+    }
+    if (board[0][0] == currentPlayer && board[1][1] == currentPlayer && board[2][2] == currentPlayer)
+    {
+        return true; // Diagonal win
+    }
+    if (board[0][2] == currentPlayer && board[1][1] == currentPlayer && board[2][0] == currentPlayer)
+    {
+        return true; // Diagonal win
+    }
+
+    return false;
+}
+
+// Function to check if the game is a draw
+bool checkDraw(const vector<vector<char>> &board)
+{
+    // Check if the board is full, indicating a draw
+    for (int i = 0; i < 3; ++i)
+    {
+        for (int j = 0; j < 3; ++j)
+        {
+            if (board[i][j] == ' ')
+            {
+                return false; // The board is not full
+            }
+        }
+    }
+    return true; // The board is full (draw)
+}
+
+// Function to switch players
+char switchPlayer(char currentPlayer)
+{
+    return (currentPlayer == 'X') ? 'Y' : 'X';
+}

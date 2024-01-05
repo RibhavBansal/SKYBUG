@@ -1,0 +1,43 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+
+int main()
+{
+    // Seed the random number generator with the current time
+    std::srand(static_cast<unsigned int>(std::time(nullptr)));
+
+    // Generate a random number between 1 and 100
+    int secretNumber = std::rand() % 100 + 1;
+
+    int userGuess;
+    int attempts = 0;
+
+    std::cout << "🌟 Welcome to the Enchanting Guess the Number Game! 🌟\n";
+    std::cout << "🧙‍♂️ Try to guess the magical number between 1 and 100. 🧙‍♂️\n";
+
+    do
+    {
+        std::cout << "🔮 Enter your mystical guess: ";
+        std::cin >> userGuess;
+
+        // Check if the guess is too high, too low, or correct
+        if (userGuess > secretNumber)
+        {
+            std::cout << "🔥 Too high! The magical number is more elusive. Try again. 🔥\n";
+        }
+        else if (userGuess < secretNumber)
+        {
+            std::cout << "❄️ Too low! The magical number is soaring higher. Try again. ❄️\n";
+        }
+        else
+        {
+            std::cout << "🎉 Congratulations! You've unlocked the secrets in " << attempts + 1 << " attempts! 🎉\n";
+        }
+
+        attempts++;
+
+    } while (userGuess != secretNumber);
+
+    return 0;
+}
